@@ -13,10 +13,20 @@
 # ********************************************* for render template *************************************
 from fastapi import FastAPI
 from user import router as UserRouter
-# here we import router to handle user related endpoints from user module
+from tortoise.contrib.fastapi import register_tortoise
+
+
+
 
 
 app = FastAPI()
 app.include_router(UserRouter.router)
 
-# app.include_router(UserRouter.router) ke through UserRouter add kiya hai. Yeh UserRouter module se aane wale endpoints ko include karta hai, jo user related operations ko handle karenge.
+register_tortoise(
+    app,
+    db_url="postgres://postgres:8821@127.0.0.1/crudinfastapi",
+    modules={'models': ['user.models',]},
+    generate_schemas=True,
+    add_exception_handlers=True
+)
+
