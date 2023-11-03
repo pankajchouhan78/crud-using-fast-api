@@ -25,12 +25,13 @@
         <tbody>
             {% for user in users %}
           <tr>
-            <th scope="row">1</th>
+            <th scope="row">{{ loop.index }}</th>
             <td>{{user.name}}</td>
             <td>{{user.email}}</td>
             <td>{{user.phone}}</td>
             <td>
                 <a href="/deleteuser/{{user.id}}/" type="button" class="btn btn-danger">Delete</a>
+                <a href="/updateuser/{{user.id}}/" type="button" class="btn btn-warning">Update</a>
             </td>
           </tr>
           {% endfor %}

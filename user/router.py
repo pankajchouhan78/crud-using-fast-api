@@ -12,9 +12,11 @@ async def read_item(request:Request):
     return templates.TemplateResponse('index.html', {'request': request})
 
 @router.post('/registration/', response_class= HTMLResponse)
-async def registration(request:Request, name: str = Form(...),
-                       email:str =Form(...), password:str =Form(...),
-                       phone:str=Form(...)):
+async def registration(request:Request,
+                    name: str = Form(...),
+                    email:str = Form(...),
+                    password:str = Form(...),
+                    phone:str = Form(...)):
     if await User.filter(email=email).exists():
         raise HTMLResponse(status_code=409, detail='User already exists')
     
@@ -22,10 +24,8 @@ async def registration(request:Request, name: str = Form(...),
         raise HTMLResponse(status_code=409, detail='Phone number already exists')
     else:
         await User.create(name=name, email=email, phone=phone, password=password)
-        return RedirectResponse('/', status_code = status.HTTP_302_FOUND)
+        return RedirectResponse('/table/', status_code = status.HTTP_302_FOUND)
     
-
-
 @router.get('/table/', response_class = HTMLResponse )
 async def table(request:Request):
     users = await User.all()
@@ -35,4 +35,32 @@ async def table(request:Request):
 async def deleteUser(request:Request, id:int):
     await User.get(id=id).delete()
     return RedirectResponse('/table/',status_code = status.HTTP_302_FOUND)
+
+@router.get('/updateuser/{id}', response_class=HTMLResponse)
+async def updateuser(request:Request, id=id):
+    user = await User.get(id=id)
+    return templates.TemplateResponse('updateuser.html', {'request': request, 'user':user})
+
+
+@router.post('/updateuser/{id}', response_class=HTMLResponse)
+async def updateuser(request:Request, id=int,
+                     name: str = Form(...),
+                     email: str = Form(...),
+                     phone: str = Form(...)):
+    user = await User.get(id=id)
+    print("helllow world")
+    print("post request")
+    print(user)
+    if user:
+        user.name = name
+        user.email = email
+        user.phone = phone
+        await user.save()
+        print("user save")
+        return RedirectResponse('/table/', status_code=status.HTTP_302_FOUND) 
+    print("user not found")
+    return HTMLResponse(status_code=409, detail='User not found')
+
+
+
 
