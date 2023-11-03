@@ -48,9 +48,6 @@ async def updateuser(request:Request, id=int,
                      email: str = Form(...),
                      phone: str = Form(...)):
     user = await User.get(id=id)
-    print("helllow world")
-    print("post request")
-    print(user)
     if user:
         user.name = name
         user.email = email
