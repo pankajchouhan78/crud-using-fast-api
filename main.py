@@ -8,7 +8,7 @@ admin = Admin(app, engine)
 
 class ParentAdmin(ModelView, model=Parent):
     # Define columns to display in the admin view
-    column_list = [Parent.id, Parent.name, Parent.email, Parent.children]
+    column_list = [Parent.id, Parent.name, Parent.email]
 
 class ChildAdmin(ModelView, model=Child):
     # Define columns to display in the admin view

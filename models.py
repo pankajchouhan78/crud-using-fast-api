@@ -8,6 +8,7 @@ engine = create_engine(
     connect_args={"check_same_thread": False},
 )
 
+"""
 
 class Parent(Base):
     __tablename__ = 'parent'
@@ -15,8 +16,8 @@ class Parent(Base):
     name = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False)
     
-    # Explicitly define the reverse relationship in Parent
-    children = relationship('Child', back_populates='parent', lazy='select')
+    # One-to-one relationship with child (one parent has one child)
+    child = relationship('Child', back_populates='parent', uselist=False)
     
     def __str__(self):
         return self.name
@@ -26,16 +27,17 @@ class Child(Base):
     __tablename__ = 'child'
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
-    parent_id = Column(Integer, ForeignKey('parent.id'), nullable=False)
+    parent_id = Column(Integer, ForeignKey('parent.id'), nullable=False, unique=True)
     
-    # parent relation with reverse relationship to Parent
-    parent = relationship(Parent, back_populates='children', lazy='select')
+    # One-to-one relationship with parent (one child has one parent)
+    parent = relationship(Parent, back_populates='child')
     
     def __str__(self):
         return self.name
 
-
 """
+
+
 ## use backref function
 
 class Parent(Base):
@@ -52,13 +54,13 @@ class Child(Base):
     __tablename__ = 'child'
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
-    parent_id = Column(Integer, ForeignKey('parent.id'), nullable=False)
+    parent_id = Column(Integer, ForeignKey('parent.id'), nullable=False, unique=True)
     
     # parent relation
-    parent = relationship(Parent, backref=backref('children', lazy=True))
+    parent = relationship(Parent, backref=backref('child', uselist=False))
     
     def __str__(self):
         return self.name
-"""
+
 
 Base.metadata.create_all(engine)  # Create tables
