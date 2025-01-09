@@ -8,3 +8,6 @@ https://adex.ltd/database-migrations-with-alembic-and-fastapi-a-comprehensive-gu
 
 # Dot env configuration
 https://dev.to/yanagisawahidetoshi/efficiently-using-environment-variables-in-fastapi-4lal
+
+# admin pannel configuration
+https://github.com/aminalaee/sqladmin?tab=readme-ov-file
